@@ -2,6 +2,10 @@
 
 Grace Detective Agency 的雙語偵探遊戲，由 Canva 網站（badger-4ws0rm.my.canva.site）重建成可在手機、平板、電腦操作的 Web App。
 
+**線上版：** https://blackwood-manor-case.vercel.app
+
+推送到 `main` 分支後，Vercel 會自動重新部署。
+
 ## 開發
 
 ```bash
