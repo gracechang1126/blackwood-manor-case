@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --bar-h: 48px;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #1a110b radial-gradient(ellipse at top, #3a2516 0%, #1a110b 60%) fixed;
+  color: #faf2e9;
+  font-family: 'Noto Serif TC', 'PingFang TC', serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Stage: the 16:9 screen. Portrait phones use full width; wider/landscape screens fit inside the viewport. */
+.stage {
+  width: 100%;
+  aspect-ratio: 1366 / 768;
+  container-type: inline-size;
+}
+@media (min-width: 1024px), (orientation: landscape) {
+  .stage {
+    width: min(100vw, calc((100dvh - var(--bar-h)) * 1366 / 768));
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fade { animation: fade-in 0.35s ease-out both; }
+
+@keyframes pulse-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201, 164, 92, 0); }
+  50% { box-shadow: 0 0 0 4px rgba(201, 164, 92, 0.55); }
+}
