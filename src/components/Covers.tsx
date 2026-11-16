@@ -31,7 +31,7 @@ export default function Covers({ covers, revealed, onReveal, onReset }: Props) {
             }`}
           >
             <span className="font-display font-bold text-brass/70" style={{ fontSize: 'max(14px, 2.6cqw)' }}>
-              {i + 1}
+              {c.label ?? i + 1}
             </span>
           </button>
         );
