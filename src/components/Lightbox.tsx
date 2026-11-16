@@ -1,16 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { X, ZoomIn, ZoomOut } from 'lucide-react';
 
 interface Props {
   src: string;
   alt: string;
   onClose: () => void;
+  /** Layer drawn over the image at the same scale (e.g. photo covers). */
+  layer?: ReactNode;
 }
 
 const LEVELS = [1, 1.6, 2.4, 3.5];
 
 /** Full-screen image viewer with zoom levels, scroll/drag panning and native pinch-zoom. */
-export default function Lightbox({ src, alt, onClose }: Props) {
+export default function Lightbox({ src, alt, onClose, layer }: Props) {
   const [level, setLevel] = useState(() => (window.matchMedia('(min-width: 1024px), (orientation: landscape)').matches ? 0 : 2));
   const scroller = useRef<HTMLDivElement>(null);
   const drag = useRef<{ x: number; y: number; l: number; t: number } | null>(null);
@@ -76,13 +78,10 @@ export default function Lightbox({ src, alt, onClose }: Props) {
         onPointerLeave={() => (drag.current = null)}
       >
         <div className="flex min-h-full min-w-full items-center justify-center p-2">
-          <img
-            src={src}
-            alt={alt}
-            draggable={false}
-            style={{ width: `min(${scale * 100}vw, ${scale * 1.778 * 85}vh)`, maxWidth: 'none' }}
-            className="h-auto select-none"
-          />
+          <div className="relative shrink-0" style={{ width: `min(${scale * 100}vw, ${scale * 1.778 * 85}vh)`, containerType: 'inline-size' }}>
+            <img src={src} alt={alt} draggable={false} className="block h-auto w-full select-none" />
+            {layer}
+          </div>
         </div>
       </div>
       <p className="pb-[max(0.5rem,env(safe-area-inset-bottom))] text-center text-xs text-parchment/50">雙指縮放或拖曳查看細節 · 按 Esc 關閉</p>

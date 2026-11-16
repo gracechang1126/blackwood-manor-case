@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import ActionPanel from '../components/ActionPanel';
+import Covers from '../components/Covers';
 import { BudgetCards, BudgetOverlay } from '../components/Budget';
 import Lightbox from '../components/Lightbox';
 import { QuestionsCards, QuestionsOverlay } from '../components/Questions';
 import Stage from '../components/Stage';
 import TopBar from '../components/TopBar';
+import { coversByScreen } from '../data/covers';
 import { getScreen, HOME_ID } from '../data/screens';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 import NotFound from './NotFound';
 
 export default function ScreenPage() {
@@ -14,6 +17,8 @@ export default function ScreenPage() {
   const id = params.id ?? HOME_ID;
   const screen = getScreen(id);
   const [zoom, setZoom] = useState(false);
+  // Which photo covers have been opened, per screen: { '13': [0, 4] }
+  const [revealed, setRevealed] = useLocalStorage<Record<string, number[]>>('bmc.revealed', {});
 
   useEffect(() => {
     setZoom(false);
@@ -29,18 +34,30 @@ export default function ScreenPage() {
   if (params.id === HOME_ID) return <Navigate to="/" replace />;
   if (!screen || screen.hidden) return <NotFound />;
 
+  const covers = coversByScreen[screen.id];
+  const open = revealed[screen.id] ?? [];
+  const coverLayer = (withReset: boolean) =>
+    covers && (
+      <Covers
+        covers={covers}
+        revealed={open}
+        onReveal={(i) => setRevealed({ ...revealed, [screen.id]: [...open, i] })}
+        onReset={withReset ? () => setRevealed({ ...revealed, [screen.id]: [] }) : undefined}
+      />
+    );
+
   const overlay = screen.special === 'questions' ? <QuestionsOverlay /> : screen.special === 'budget' ? <BudgetOverlay /> : undefined;
 
   return (
     <div className="flex min-h-[100dvh] flex-col">
       <TopBar title={screen.title} group={screen.group} />
       <main className="flex flex-1 flex-col wide:items-center wide:justify-center">
-        <Stage key={screen.id} screen={screen} onZoom={() => setZoom(true)} overlay={overlay} />
+        <Stage key={screen.id} screen={screen} onZoom={() => setZoom(true)} overlay={overlay} cover={coverLayer(true)} />
         {screen.special === 'questions' && <QuestionsCards />}
         {screen.special === 'budget' && <BudgetCards />}
         <ActionPanel hotspots={screen.hotspots} />
       </main>
-      {zoom && <Lightbox src={screen.image} alt={screen.title} onClose={() => setZoom(false)} />}
+      {zoom && <Lightbox src={screen.image} alt={screen.title} onClose={() => setZoom(false)} layer={coverLayer(false)} />}
     </div>
   );
 }

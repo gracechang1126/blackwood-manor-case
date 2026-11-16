@@ -9,6 +9,8 @@ interface Props {
   onZoom: () => void;
   /** Extra interactive layer placed over the image (same % coordinate space). */
   overlay?: ReactNode;
+  /** Layer shown in every layout (e.g. photo covers), above the hotspots. */
+  cover?: ReactNode;
 }
 
 /**
@@ -16,7 +18,7 @@ interface Props {
  * button positions are live hotspots. On portrait phones the image is a tap-to-zoom preview
  * and navigation moves to the touch-friendly ActionPanel below.
  */
-export default function Stage({ screen, onZoom, overlay }: Props) {
+export default function Stage({ screen, onZoom, overlay, cover }: Props) {
   const navigate = useNavigate();
   const [loaded, setLoaded] = useState(false);
 
@@ -43,7 +45,7 @@ export default function Stage({ screen, onZoom, overlay }: Props) {
         aria-label="放大圖片"
         className="absolute inset-0 wide:hidden"
       >
-        <span className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-black/65 px-2.5 py-1 text-xs text-parchment">
+        <span className="absolute bottom-2 right-2 z-20 flex items-center gap-1 rounded-full bg-black/65 px-2.5 py-1 text-xs text-parchment">
           <ZoomIn size={14} /> 點圖放大
         </span>
       </button>
@@ -72,6 +74,7 @@ export default function Stage({ screen, onZoom, overlay }: Props) {
           <ZoomIn size={18} />
         </button>
       </div>
+      {cover}
     </div>
   );
 }
