@@ -1,14 +1,14 @@
 import { ChevronRight, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { Hotspot } from '../data/types';
-import { HOME_ID, MAP_ID, MENU_ID } from '../data/screens';
+import { HOME_ID, LOCATIONS_ID, MAP_ID, MENU_ID } from '../data/screens';
 import { openHotspot } from '../lib/openHotspot';
 
 interface Props {
   hotspots: Hotspot[];
 }
 
-const GLOBAL = new Set([HOME_ID, MAP_ID, MENU_ID]);
+const GLOBAL = new Set([HOME_ID, MAP_ID, MENU_ID, LOCATIONS_ID]);
 const SEP = ' · ';
 
 interface Group {
@@ -46,7 +46,7 @@ export default function ActionPanel({ hotspots }: Props) {
     seen.add(k);
     return true;
   });
-  // Main Menu / Manor Map / Home are always in the top bar, so list them last.
+  // Main Menu / Manor Map / Home / Scene Investigation are always in the top bar, so list them last.
   const primary = groupItems(items.filter((h) => !(h.to && GLOBAL.has(h.to))));
   const secondary = items.filter((h) => h.to && GLOBAL.has(h.to));
 

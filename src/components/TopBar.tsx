@@ -1,6 +1,6 @@
-import { ArrowLeft, Home, Map, LayoutGrid } from 'lucide-react';
+import { ArrowLeft, Home, Map, LayoutGrid, MapPin } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { HOME_ID, MAP_ID, MENU_ID, screenPath } from '../data/screens';
+import { HOME_ID, LOCATIONS_ID, MAP_ID, MENU_ID, screenPath } from '../data/screens';
 
 interface Props {
   title: string;
@@ -41,6 +41,9 @@ export default function TopBar({ title, group }: Props) {
         </Link>
         <Link to={screenPath(MENU_ID)} className={iconBtn} aria-label="主選單 Main Menu" title="Main Menu">
           <LayoutGrid size={20} />
+        </Link>
+        <Link to={screenPath(LOCATIONS_ID)} className={iconBtn} aria-label="現場調查 Scene Investigation" title="Scene Investigation">
+          <MapPin size={20} />
         </Link>
       </nav>
     </header>
