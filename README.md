@@ -31,7 +31,7 @@ src/
     screens.json          99 個畫面：圖片、標題、熱區（由 scripts/build_screens.py 產生）
     questions.ts          本週題目文字與選項位置 ← 每週換題改這裡
     prices.ts             偵探資料庫價目表
-public/screens/           各畫面圖片（webp）
+public/screens/           各畫面圖片（webp）。替換圖片後，把 src/data/screens.ts 的 IMAGE_VERSION 加 1
 ```
 
 ## 響應式規則
